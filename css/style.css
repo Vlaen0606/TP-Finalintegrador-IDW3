@@ -1,0 +1,727 @@
+/* =========================================================
+   Veterinaria La Mary — hoja de estilos general
+   Concepto visual: el sitio toma prestado el lenguaje de las
+   fichas y carpetas de historia clínica: pestañas de carpeta
+   para la navegación, tarjetas tipo "ficha" para el contenido,
+   un sello circular para el logo.
+
+   Esta hoja se carga DESPUÉS de bootstrap.min.css (ver <head>
+   de cada página), a propósito: así nuestras reglas ganan la
+   cascada y podemos "re-pintar" los componentes de Bootstrap
+   (botones, badges, alerts, navbar, formularios, modales) con
+   la paleta propia, sin tocar el archivo de Bootstrap.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+  /* -- color: paleta base (modo claro) -- */
+  --bg:        #F6F3EC;   /* papel cálido */
+  --bg-card:   #FFFDF8;   /* ficha, más clara que el fondo */
+  --bg-alt:    #ECE6D6;   /* franjas / secciones alternas */
+  --ink:       #23301F;   /* texto principal, verde-carbón */
+  --ink-soft:  #5B6355;   /* texto secundario */
+  --primary:   #3B5D42;   /* verde pino — institucional, confianza */
+  --primary-dk:#243B29;   /* verde muy oscuro — fondos sólidos fijos (footer, sello) */
+  --heading:   var(--primary-dk); /* color de títulos y líneas de énfasis: se invierte en modo oscuro */
+  --accent:    #C97B3D;   /* ocre cálido — calidez, cuidado */
+  --accent-dk: #A15F29;
+  --accent-soft:#EAD2AE;  /* resalte suave (fondo de chips) */
+  --line:      #D9D0BC;   /* filetes / bordes */
+  --white:     #FFFFFF;
+  --link:      var(--primary);
+  --link-rgb:  59,93,66;
+  --link-hover:var(--accent-dk);
+  --link-hover-rgb: 161,95,41;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Work Sans", -apple-system, Segoe UI, sans-serif;
+
+  --radius-card: 4px 16px 4px 4px; /* esquina "doblada" tipo ficha */
+  --shadow-card: 0 1px 0 rgba(35,48,31,0.06), 0 6px 16px -10px rgba(35,48,31,0.25);
+  --container: 1080px;
+
+  /* -- mapeo de variables de Bootstrap 5.3 a nuestra paleta --
+     Esto retematiza automáticamente utilidades como .text-primary,
+     .bg-primary, .border-primary, los focus-ring y los links. Los
+     componentes puntuales (botones, badges, alerts) además reciben
+     un override explícito más abajo, por prolijidad. */
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--ink);
+  --bs-body-font-family: var(--font-body);
+  --bs-border-color: var(--line);
+  --bs-border-radius: 10px;
+  --bs-border-radius-sm: 6px;
+  --bs-border-radius-lg: 14px;
+  --bs-link-color: var(--link);
+  --bs-link-color-rgb: var(--link-rgb);
+  --bs-link-hover-color: var(--link-hover);
+  --bs-link-hover-color-rgb: var(--link-hover-rgb);
+  --bs-primary: var(--primary);
+  --bs-primary-rgb: 59,93,66;
+  --bs-secondary: var(--accent-dk);
+  --bs-secondary-rgb: 161,95,41;
+  --bs-emphasis-color: var(--heading);
+}
+
+/* -- paleta modo oscuro --
+   Bootstrap activa sus propios estilos de componente cuando
+   detecta data-bs-theme="dark" en el <html>; nosotros además
+   redefinimos nuestras propias variables para que TODO el sitio
+   (lo propio + lo de Bootstrap) cambie de forma coherente. */
+:root[data-bs-theme="dark"]{
+  --bg:        #1B211A;
+  --bg-card:   #232B1F;
+  --bg-alt:    #29321F;
+  --ink:       #E9E4D3;
+  --ink-soft:  #ABAF9B;
+  --heading:   #A9D3B3;   /* verde claro: los títulos necesitan contraste sobre fondo oscuro */
+  --accent-soft:#3D2C18;  /* chip oscuro */
+  --accent-dk: #E7A768;   /* ocre claro: legible sobre fondo oscuro */
+  --line:      #3A4234;
+  --link:      #A9D3B3;
+  --link-rgb:  169,211,179;
+  --link-hover: #E7A768;
+  --link-hover-rgb: 231,167,104;
+  --shadow-card: 0 1px 0 rgba(0,0,0,0.4), 0 8px 20px -10px rgba(0,0,0,0.6);
+
+  --bs-body-bg: var(--bg);
+  --bs-body-color: var(--ink);
+  --bs-border-color: var(--line);
+  --bs-tertiary-bg: var(--bg-alt);
+  --bs-secondary-bg: var(--bg-card);
+  --bs-emphasis-color: var(--heading);
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+
+html{ scroll-behavior: smooth; }
+
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+img{ max-width: 100%; display: block; }
+
+a{ color: var(--link); text-decoration-color: var(--accent-soft); text-underline-offset: 3px; }
+a:hover{ color: var(--link-hover); }
+
+:focus-visible{
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+h1, h2, h3, h4{
+  font-family: var(--font-display);
+  color: var(--heading);
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  font-weight: 600;
+}
+
+h1{ font-size: clamp(2.1rem, 4vw, 3.2rem); font-weight: 500; }
+h2{ font-size: clamp(1.5rem, 2.6vw, 2rem); }
+h3{ font-size: 1.15rem; }
+
+p{ margin: 0 0 1em; max-width: 68ch; color: var(--ink-soft); }
+
+.container{
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* =========================================================
+   Encabezado + navegación (Bootstrap navbar + estilo propio
+   de "pestañas de carpeta")
+   ========================================================= */
+
+.site-header{
+  background: var(--bg);
+  border-bottom: 2px solid var(--heading);
+  padding-top: 14px;
+  padding-bottom: 0;
+}
+
+.header-row{ gap: 10px 24px; }
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--heading);
+}
+.brand:hover{ color: var(--heading); }
+
+.brand-mark{
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 2px solid var(--primary-dk);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.brand-mark svg{ width: 26px; height: 26px; }
+
+.brand-text{
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+.brand-text span{
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: 0.4px;
+}
+
+/* Botón hamburguesa: recoloreamos el ícono con un SVG propio
+   (uno para modo claro, otro para modo oscuro) para no depender
+   del azul/gris por defecto de Bootstrap. */
+.navbar-toggler{
+  border: 2px solid var(--heading);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.navbar-toggler:focus{ box-shadow: 0 0 0 3px rgba(59,93,66,0.25); }
+.navbar-toggler-icon{
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23243B29' stroke-width='2.4' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+:root[data-bs-theme="dark"] .navbar-toggler-icon{
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23A9D3B3' stroke-width='2.4' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.tabs{
+  gap: 6px;
+}
+
+.tabs .nav-link{
+  display: inline-block;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 10px 20px 12px;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: 10px 10px 0 0;
+  position: relative;
+  top: 2px;
+  cursor: pointer;
+}
+
+.tabs .nav-link:hover{
+  color: var(--heading);
+  background: var(--bg-alt);
+}
+
+.tabs .nav-link.active{
+  color: var(--heading);
+  background: var(--bg-card);
+  border-color: var(--heading);
+  top: 2px;
+}
+
+/* Botón de modo claro/oscuro, dentro del mismo menú colapsable */
+.theme-toggle{
+  border: 2px solid var(--heading);
+  background: transparent;
+  color: var(--heading);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.theme-toggle:hover{ background: var(--bg-alt); }
+
+/* =========================================================
+   Hero
+   ========================================================= */
+
+.hero{
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-inner{
+  padding: 48px 0 56px;
+}
+
+.hero-copy .eyebrow-note{
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--accent-dk);
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.hero-copy h1{ margin-bottom: 0.35em; }
+.hero-copy p{ font-size: 1.06rem; }
+
+.hero-actions{
+  display: flex;
+  gap: 14px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+/* Re-pintado de los botones de Bootstrap con la paleta propia.
+   Se aplica sobre las clases estándar .btn-primary / .btn-outline-primary,
+   así que cualquier botón que agreguemos con esas clases ya sale
+   "de marca" sin tocar nada más. */
+.btn{ font-weight: 600; border-width: 2px; border-radius: 8px; }
+
+.btn-primary{
+  background-color: var(--primary);
+  border-color: var(--primary-dk);
+  color: var(--white);
+}
+.btn-primary:hover, .btn-primary:focus, .btn-primary:active{
+  background-color: var(--primary-dk) !important;
+  border-color: var(--primary-dk) !important;
+  color: var(--white) !important;
+}
+
+.btn-outline-primary{
+  color: var(--heading);
+  border-color: var(--heading);
+  background-color: transparent;
+}
+.btn-outline-primary:hover, .btn-outline-primary:focus{
+  background-color: var(--heading) !important;
+  border-color: var(--heading) !important;
+  color: var(--bg-card) !important;
+}
+
+.btn-outline-secondary{
+  color: var(--accent-dk);
+  border-color: var(--accent-dk);
+}
+.btn-outline-secondary:hover{
+  background-color: var(--accent-dk) !important;
+  border-color: var(--accent-dk) !important;
+  color: var(--white) !important;
+}
+
+.hero-card{
+  background: var(--white);
+  border: 2px solid var(--heading);
+  border-radius: var(--radius-card);
+  padding: 26px;
+  box-shadow: var(--shadow-card);
+}
+:root[data-bs-theme="dark"] .hero-card{ background: var(--bg-card); }
+
+.hero-card dl{ margin: 0; }
+.hero-card .stamp-title{
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--heading);
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 10px;
+  margin-bottom: 14px;
+}
+.hero-card .stat-row{
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bg-alt);
+  font-size: 0.94rem;
+}
+.hero-card .stat-row:last-child{ border-bottom: none; }
+.hero-card .stat-row dt{ color: var(--ink-soft); }
+.hero-card .stat-row dd{ margin: 0; font-weight: 600; color: var(--ink); }
+
+/* =========================================================
+   Secciones generales
+   ========================================================= */
+
+section{ padding: 56px 0; }
+.section-alt{ background: var(--bg-alt); }
+
+.section-head{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  border-bottom: 2px solid var(--heading);
+  padding-bottom: 12px;
+}
+
+.section-head p{ margin: 0; }
+
+.folder-label{
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-dk);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+/* =========================================================
+   Fichas de profesionales — Bootstrap card + grid propio
+   ========================================================= */
+
+.vet-card{
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--primary);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.vet-avatar{
+  height: 128px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 2.1rem;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 1px;
+  background: var(--avatar-color, var(--primary));
+}
+
+.vet-foto{
+  display: block;
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center 25%;
+  background: var(--accent-soft);
+}
+
+.vet-card .card-body{ padding: 20px 22px; }
+.vet-card .card-title{ margin-bottom: 4px; color: var(--heading); }
+
+.badge-brand{
+  background: var(--accent-soft);
+  color: var(--accent-dk);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 6px 12px;
+}
+
+.vet-card .valor{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+  margin-top: 14px;
+}
+.vet-card .valor .label{ font-size: 0.82rem; color: var(--ink-soft); }
+.vet-card .valor .monto{ font-family: var(--font-display); font-size: 1.25rem; color: var(--heading); font-weight: 600; }
+
+/* Modales de perfil: mismo lenguaje visual que las fichas */
+.modal-content{
+  border-radius: var(--radius-card);
+  border: 2px solid var(--heading);
+  background: var(--bg-card);
+}
+.modal-header{
+  border-bottom: 1px dashed var(--line);
+}
+.modal-footer{
+  border-top: 1px dashed var(--line);
+}
+
+/* =========================================================
+   Bloques de tres columnas (features)
+   ========================================================= */
+
+.feature{
+  padding-left: 18px;
+  border-left: 3px solid var(--accent);
+  height: 100%;
+}
+.feature h3{ margin-bottom: 6px; }
+.feature p{ margin-bottom: 0; }
+
+/* =========================================================
+   Tablas informativas (horarios, etc.) — Bootstrap table
+   ========================================================= */
+
+.info-table{
+  --bs-table-bg: var(--bg-card);
+  --bs-table-striped-bg: var(--bg-alt);
+  --bs-table-color: var(--ink);
+  --bs-table-border-color: var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.info-table thead th{
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--heading);
+  background: var(--bg-alt);
+  border-bottom-width: 2px;
+}
+
+/* =========================================================
+   Página institucional — bloques narrativos
+   ========================================================= */
+
+.story-figure{
+  background: var(--primary);
+  border: 2px solid var(--primary-dk);
+  border-radius: var(--radius-card);
+  min-height: 220px;
+  display: grid;
+  place-items: center;
+  color: var(--white);
+  height: 100%;
+}
+.story-figure svg{ width: 88px; height: 88px; }
+
+.values-list .list-group-item{
+  background: var(--bg-card);
+  border-color: var(--line);
+  color: var(--ink);
+}
+.values-list strong{ color: var(--heading); font-family: var(--font-display); }
+
+.alert-brand{
+  --bs-alert-bg: var(--accent-soft);
+  --bs-alert-border-color: var(--accent-dk);
+  --bs-alert-color: var(--ink);
+  border-left: 4px solid var(--accent-dk);
+}
+.alert-brand strong{ color: var(--accent-dk); }
+
+/* =========================================================
+   Contacto
+   ========================================================= */
+
+.contact-card{
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 26px;
+  box-shadow: var(--shadow-card);
+  height: 100%;
+}
+
+.contact-list{
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.contact-list li{
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px dashed var(--line);
+}
+.contact-list li:last-child{ border-bottom: none; }
+.contact-list .icon{
+  width: 22px; height: 22px; flex-shrink: 0; color: var(--accent-dk);
+}
+.contact-list .label{
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+.contact-list .value{ font-weight: 600; color: var(--ink); }
+
+.map-placeholder{
+  background: repeating-linear-gradient(45deg, var(--bg-alt), var(--bg-alt) 10px, var(--bg-card) 10px, var(--bg-card) 20px);
+  border: 2px dashed var(--line);
+  border-radius: var(--radius-card);
+  min-height: 220px;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px;
+}
+
+.notice{
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-dk);
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.notice strong{ color: var(--accent-dk); }
+
+/* Formulario de contacto: acomoda los form-control de Bootstrap
+   a la paleta propia (fondo, borde y foco). */
+.form-label{ font-weight: 600; color: var(--ink); font-size: 0.9rem; }
+.form-control, .form-select{
+  background-color: var(--bg-card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.form-control:focus, .form-select:focus{
+  background-color: var(--bg-card);
+  color: var(--ink);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 0.2rem rgba(59,93,66,0.2);
+}
+.form-control::placeholder{ color: var(--ink-soft); opacity: .7; }
+.form-text{ color: var(--ink-soft); }
+.invalid-feedback{ color: var(--accent-dk); }
+
+/* =========================================================
+   Pie de página
+   ========================================================= */
+
+.site-footer{
+  background: var(--primary-dk);
+  color: #E8E4D6;
+  margin-top: 40px;
+}
+
+.footer-inner{
+  padding: 40px 0 28px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 32px;
+}
+
+.site-footer h4{
+  color: var(--white);
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.site-footer p, .site-footer a{ color: #C9C6B4; font-size: 0.92rem; }
+.site-footer a{ text-decoration: none; }
+.site-footer a:hover{ color: var(--white); }
+
+.footer-nav{ list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+
+.footer-bottom{
+  border-top: 1px solid rgba(255,255,255,0.12);
+  padding: 16px 0;
+  font-size: 0.82rem;
+  color: #A8A48F;
+  text-align: center;
+}
+
+/* =========================================================
+   Páginas de administración (Mascotas / Veterinarios)
+   Formulario en ficha + tabla Bootstrap responsive.
+   ========================================================= */
+
+.admin-form-card{ height: auto; }
+@media (min-width: 992px){
+  .admin-form-card{ position: sticky; top: 16px; }
+}
+
+.admin-table-wrap{ border: 1px solid var(--line); border-radius: 4px; }
+
+.info-table td, .info-table th{ color: var(--ink); }
+
+.empty-state{
+  margin: 16px 0 0;
+  padding: 18px;
+  text-align: center;
+  background: var(--bg-card);
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  max-width: none;
+}
+
+.pet-thumb{
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.pet-thumb-lg{ width: 96px; height: 96px; border-radius: 12px; }
+.pet-thumb-vacio{
+  background: var(--accent-soft);
+  color: var(--accent-dk);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.btn-outline-danger{ border-color: #A63D2F; color: #A63D2F; }
+.btn-outline-danger:hover, .btn-outline-danger:focus{
+  background-color: #A63D2F !important;
+  border-color: #A63D2F !important;
+  color: var(--white) !important;
+}
+.btn-danger{ background-color: #A63D2F; border-color: #8A3025; color: var(--white); }
+.btn-danger:hover, .btn-danger:focus{ background-color: #8A3025 !important; border-color: #8A3025 !important; color: var(--white) !important; }
+:root[data-bs-theme="dark"] .btn-outline-danger{ border-color: #E58A7B; color: #E58A7B; }
+
+.input-group-text{ background: var(--bg-alt); border-color: var(--line); color: var(--ink-soft); }
+
+/* Valor de consulta dentro del modal de perfil (portada) */
+.modal-body .valor{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-top: 1px dashed var(--line);
+  padding-top: 10px;
+}
+.modal-body .valor .label{ font-size: 0.82rem; color: var(--ink-soft); }
+.modal-body .valor .monto{ font-family: var(--font-display); font-size: 1.25rem; color: var(--heading); font-weight: 600; }
+
+/* =========================================================
+   Responsive
+   Puntos de quiebre usados en todo el sitio (además de los
+   propios de las utilidades de grilla de Bootstrap, que ya
+   cubren sm/md/lg/xl):
+     - 860px → layouts de dos columnas pasan a una columna
+     - 640px → ajustes finos de header/footer/espaciados
+   Sumado a las clases row-cols-* (xs/sm/lg) y navbar-expand-lg
+   que se usan en el HTML, el sitio contempla más de tres
+   puntos de quiebre en total.
+   ========================================================= */
+
+@media (max-width: 860px){
+  .footer-inner{ grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px){
+  .footer-inner{ grid-template-columns: 1fr; }
+  section{ padding: 40px 0; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{ scroll-behavior: auto; }
+}
